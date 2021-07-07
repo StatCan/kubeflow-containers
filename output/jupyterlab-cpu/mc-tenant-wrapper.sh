@@ -16,4 +16,11 @@ for  f in $(ls /vault/secrets/minio-* | grep -v -E '\..*'); do
      touch /tmp/.minio-$tenant
  fi
 done
-$MC $@
+args=( "$@" )
+for ((i=0; i < $#; i++)) ;do
+  if [  "${args[$i]}" != "${args[$i]% *}" ]; then
+    args[$i]="\"${args[$i]}\""
+  fi
+done
+set "${args[@]}"
+$MC "$@"
